@@ -1,19 +1,23 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-//connect to mongoDB
-mongoose.connect('mongodb://localhost:2717/express_app', function() {
-    console.log('Connection to mongoDB has been established');
+//connect to mongodb
+mongoose.connect('mongodb://localhost:27017/express_app', function() {
+    console.log('Connection to mongo has been established!');
   })
   .catch(err => {
-    console.error('App starting error: ', err.stack);
+    console.error('App starting error:', err.stack);
+    process.exit(1);
   });
 
 // Require file system module
@@ -33,11 +37,6 @@ app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
